@@ -90,7 +90,18 @@ async function getBrands(vehicleType) {
       type_label: getTypes(vehicleType),
       data,
     };
-    return ret;    
+    return ret;   
+    
+  //     // Return data
+  // const ret = {
+  //   success: true,
+  //   updatedAt: dataTableUpdate,
+  //   type: vehicleType,
+  //   type_label: getTypes(vehicleType),
+  //   data: data.slice(0, 3), // Limitando para as primeiras três marcas
+  // };
+  // return ret;
+
   } catch (error) {
     const ret = { success: false, error };
     return ret;
