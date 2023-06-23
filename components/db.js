@@ -113,6 +113,32 @@ async function find(collectionName, query) {
   }
 }
 
+async function testDatabaseConnection() {
+  try {
+    // Create an instance of the DB class
+    const db = new DB();
+
+    // Connect to the database
+    await db.connect();
+
+    // Check if the connection is successful
+    if (db.isConnected()) {
+      console.log('Database connection successful!');
+    } else {
+      console.log('Unable to establish a database connection.');
+    }
+
+    // Disconnect from the database
+    await db.disconnect();
+  } catch (error) {
+    console.error('An error occurred while testing the database connection:', error);
+  }
+}
+
+// Run the test
+testDatabaseConnection();
+
+
 // Export
 module.exports = {
   add,

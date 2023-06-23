@@ -52,8 +52,8 @@ async function getBrands(vehicleType) {
     let dataCached, data = {};
 
     if( cacheEnabled ){
-      // Cache enabled - Try to find data in database
-      if( DEBUG ) console.log("Cache enabled");
+      // Cache ativado - Try to find data in database
+      if( DEBUG ) console.log("Cache ativado");
       dataCached = await DB.find(tableName, payload );
     } else {
       // Cache disabled
@@ -73,7 +73,7 @@ async function getBrands(vehicleType) {
       });
       data = resp.data;      
 
-      // If cache enabled, save data in database
+      // If Cache ativado, save data in database
       if( data.length > 0 ){
         // Save data in database
         // Add payload properties to array data
@@ -139,8 +139,8 @@ async function getModels(vehicleType, brandCode) {
     let dataCached, data = {};
 
     if( cacheEnabled ){
-      // Cache enabled - Try to find data in database
-      if( DEBUG ) console.log("Cache enabled");
+      // Cache ativado - Try to find data in database
+      if( DEBUG ) console.log("Cache ativado");
       dataCached = await DB.find(tableName, payload );
     } else {
       // Cache disabled
@@ -161,7 +161,7 @@ async function getModels(vehicleType, brandCode) {
       });
       data = resp.data;      
 
-      // If cache enabled, save data in database
+      // If Cache ativado, save data in database
       if( data?.Modelos?.length > 0 ){
         // Save data in database
         // Add payload properties to array data
@@ -226,8 +226,8 @@ async function getYears(vehicleType, brandCode, modelCode) {
     let dataCached, data = {};
 
     if( cacheEnabled ){
-      // Cache enabled - Try to find data in database
-      if( DEBUG ) console.log("Cache enabled");
+      // Cache ativado - Try to find data in database
+      if( DEBUG ) console.log("Cache veic ativado");
       dataCached = await DB.find(tableName, payload );
     } else {
       // Cache disabled
@@ -236,7 +236,7 @@ async function getYears(vehicleType, brandCode, modelCode) {
 
     if( dataCached?.length > 0 && cacheEnabled ){
       // Return data from local database
-      if( DEBUG ) console.log("Data returned from local database.");
+      if( DEBUG ) console.log("veic returned from local database.");
       data = dataCached; 
     } else {
       // Return data from FIPE API
@@ -248,7 +248,7 @@ async function getYears(vehicleType, brandCode, modelCode) {
       });
       data = resp.data;   
 
-      // If cache enabled, save data in database
+      // If Cache ativado, save data in database
       if( data?.length > 0 ){
         // Save data in database
         // Add payload properties to array data
@@ -322,8 +322,8 @@ async function getDetails(vehicleType, brandCode, modelCode, yearCode, typeGas =
     let dataCached, data = {};
 
     if( cacheEnabled ){
-      // Cache enabled - Try to find data in database
-      if( DEBUG ) console.log("Cache enabled");
+      // Cache ativado - Try to find data in database
+      if( DEBUG ) console.log("Cache ativado");
       dataCached = await DB.find(tableName, payload );
     } else {
       // Cache disabled
@@ -344,7 +344,7 @@ async function getDetails(vehicleType, brandCode, modelCode, yearCode, typeGas =
       });
       data = resp.data;  
 
-      // If cache enabled, save data in database
+      // If Cache ativado, save data in database
       if( data ){
         // Save data in database
         // Add payload properties to array data
