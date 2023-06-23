@@ -5,8 +5,8 @@ const DB = require('../components/db');
 const URL_BASE = "https://veiculos.fipe.org.br/api/veiculos/";
 const dataTable = process.env.FIPE_TABLE || 295; // Março/2023;
 const dataTableUpdate = new Date("2023-03");
-const cacheEnabled = Boolean( process.env.CACHE_ENABLED === "true" ) || false;
-const DEBUG = Boolean(process.env.DEBUG === "true" || false ) || false;
+const cacheEnabled = Boolean(process.env.CACHE_ENABLED === "true") || false;
+const DEBUG = Boolean(process.env.DEBUG === "true" || false) || false;
 
 // Get types
 function getTypes(vehicleType) {
@@ -26,15 +26,14 @@ function getTypes(vehicleType) {
   }
   return ret;
 }
+
 // Get brands
 async function getBrands(vehicleType) {
-
   // Define table name
   const tableName = "brands";
 
   try {
-
-    // Check paramenters
+    // Check parameters
     if (!vehicleType) {
       const ret = { success: false, error: "Vehicle type is required!" };
       if (DEBUG) console.log(ret);
@@ -46,22 +45,22 @@ async function getBrands(vehicleType) {
       codigoTabelaReferencia: dataTable,
       codigoTipoVeiculo: vehicleType,
     };
-    
+
     // Data and dataCached
     let dataCached, data = {};
 
-    if( cacheEnabled ){
-      // Cache enabled - Try to find data in database
-      if( DEBUG ) console.log("Cache enabled");
-      dataCached = await DB.find(tableName, payload );
+    if (cacheEnabled) {
+      // Cache enabled - Try to find data in cache
+      if (DEBUG) console.log("Cache enabled");
+      dataCached = await DB.find(tableName, payload);
     } else {
       // Cache disabled
-      if( DEBUG ) console.log("Cache disabled");
+      if (DEBUG) console.log("Cache disabled");
     }
 
-    if( dataCached?.length > 0 && cacheEnabled ){
-      // Return data from local database
-      data = dataCached; 
+    if (dataCached?.length > 0 && cacheEnabled) {
+      // Return data from cache
+      data = dataCached;
     } else {
       // Return data from FIPE API
       // Post request using axios with error handling
@@ -70,38 +69,28 @@ async function getBrands(vehicleType) {
           "Content-Type": "application/json",
         },
       });
-      data = resp.data;      
+      data = resp.data;
 
-      // If cache enabled, save data in database
-      if( data.length > 0 ){
-        // Save data in database
+      // If cache enabled, save data in cache
+      if (data.length > 0) {
+        // Save data in cache
         // Add payload properties to array data
-        data.forEach(function(element) {
+        data.forEach(function (element) {
           Object.assign(element, { ...payload, updatedAt: new Date() });
         });
-        if( cacheEnabled ) await DB.add(tableName, data);
+        if (cacheEnabled) await DB.add(tableName, data);
       }
     }
+
     // Return data
     const ret = {
       success: true,
       updatedAt: dataTableUpdate,
       type: vehicleType,
       type_label: getTypes(vehicleType),
-      data,
+      data: data.slice(0, 3), // Limitando para as primeiras três marcas
     };
-    return ret;   
-    
-  //     // Return data
-  // const ret = {
-  //   success: true,
-  //   updatedAt: dataTableUpdate,
-  //   type: vehicleType,
-  //   type_label: getTypes(vehicleType),
-  //   data: data.slice(0, 3), // Limitando para as primeiras três marcas
-  // };
-  // return ret;
-
+    return ret;
   } catch (error) {
     const ret = { success: false, error };
     return ret;
