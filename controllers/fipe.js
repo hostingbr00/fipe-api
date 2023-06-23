@@ -8,6 +8,15 @@ const dataTableUpdate = new Date("2023-03");
 const cacheEnabled = true;
 const DEBUG = true;
 
+// Verifica a conexão com o banco de dados
+DB.connect().then(dbClient => {
+  if (dbClient) {
+    console.log('Banco de dados conectado com sucesso.');
+  } else {
+    console.log('Falha na conexão com o banco de dados.');
+  }
+});
+
 
 // Get types
 function getTypes(vehicleType) {

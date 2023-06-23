@@ -5,6 +5,7 @@ const router = express.Router();
 // Controllers
 const FIPE = require("../controllers/fipe");
 
+
 // Version
 const VERSION = "v1";
 
