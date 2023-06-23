@@ -27,14 +27,15 @@ function getTypes(vehicleType) {
   }
   return ret;
 }
-
 // Get brands
 async function getBrands(vehicleType) {
+
   // Define table name
   const tableName = "brands";
 
   try {
-    // Check parameters
+
+    // Check paramenters
     if (!vehicleType) {
       const ret = { success: false, error: "Vehicle type is required!" };
       if (DEBUG) console.log(ret);
@@ -46,22 +47,22 @@ async function getBrands(vehicleType) {
       codigoTabelaReferencia: dataTable,
       codigoTipoVeiculo: vehicleType,
     };
-
+    
     // Data and dataCached
     let dataCached, data = {};
 
-    if (cacheEnabled) {
-      // Cache enabled - Try to find data in cache
-      if (DEBUG) console.log("Cache enabled");
-      dataCached = await DB.find(tableName, payload);
+    if( cacheEnabled ){
+      // Cache enabled - Try to find data in database
+      if( DEBUG ) console.log("Cache enabled");
+      dataCached = await DB.find(tableName, payload );
     } else {
       // Cache disabled
-      if (DEBUG) console.log("Cache disabled");
+      if( DEBUG ) console.log("Cache disabled");
     }
 
-    if (dataCached?.length > 0 && cacheEnabled) {
-      // Return data from cache
-      data = dataCached;
+    if( dataCached?.length > 0 && cacheEnabled ){
+      // Return data from local database
+      data = dataCached; 
     } else {
       // Return data from FIPE API
       // Post request using axios with error handling
@@ -70,28 +71,38 @@ async function getBrands(vehicleType) {
           "Content-Type": "application/json",
         },
       });
-      data = resp.data;
+      data = resp.data;      
 
-      // If cache enabled, save data in cache
-      if (data.length > 0) {
-        // Save data in cache
+      // If cache enabled, save data in database
+      if( data.length > 0 ){
+        // Save data in database
         // Add payload properties to array data
-        data.forEach(function (element) {
+        data.forEach(function(element) {
           Object.assign(element, { ...payload, updatedAt: new Date() });
         });
-        if (cacheEnabled) await DB.add(tableName, data);
+        if( cacheEnabled ) await DB.add(tableName, data);
       }
     }
-
     // Return data
     const ret = {
       success: true,
       updatedAt: dataTableUpdate,
       type: vehicleType,
       type_label: getTypes(vehicleType),
-      data: data.slice(0, 3), // Limitando para as primeiras três marcas
+      data,
     };
-    return ret;
+    return ret;   
+    
+  //     // Return data
+  // const ret = {
+  //   success: true,
+  //   updatedAt: dataTableUpdate,
+  //   type: vehicleType,
+  //   type_label: getTypes(vehicleType),
+  //   data: data.slice(0, 3), // Limitando para as primeiras três marcas
+  // };
+  // return ret;
+
   } catch (error) {
     const ret = { success: false, error };
     return ret;
