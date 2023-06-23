@@ -8,16 +8,6 @@ const dataTableUpdate = new Date("2023-03");
 const cacheEnabled = true;
 const DEBUG = true;
 
-// Verifica a conexão com o banco de dados
-DB.connect().then(dbClient => {
-  if (dbClient) {
-    console.log('Banco de dados conectado com sucesso.');
-  } else {
-    console.log('Falha na conexão com o banco de dados.');
-  }
-});
-
-
 // Get types
 function getTypes(vehicleType) {
   let ret;
@@ -36,7 +26,8 @@ function getTypes(vehicleType) {
   }
   return ret;
 }
-// Get brands
+
+//Get brands
 async function getBrands(vehicleType) {
 
   // Define table name
@@ -102,16 +93,6 @@ async function getBrands(vehicleType) {
     };
     return ret;   
     
-  //     // Return data
-  // const ret = {
-  //   success: true,
-  //   updatedAt: dataTableUpdate,
-  //   type: vehicleType,
-  //   type_label: getTypes(vehicleType),
-  //   data: data.slice(0, 3), // Limitando para as primeiras três marcas
-  // };
-  // return ret;
-
   } catch (error) {
     const ret = { success: false, error };
     return ret;

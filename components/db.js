@@ -21,6 +21,7 @@ async function connect() {
     });
     // connect to MongoDB server
     await dbClient.connect();
+    console.log('Conexão bem sucedida ao banco de dados.');
     // Return DB client connected
     return dbClient;
   } catch (error) {
